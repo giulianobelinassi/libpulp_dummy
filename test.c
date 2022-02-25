@@ -24,11 +24,15 @@ int main()
 {
   static char buffer[128];
   static char obuffer[20];
+  char *ret;
 
+  printf("Every entered line will be checksummed. Terminate with an interrupt (Ctrl-C) or an end of transmission (Ctrl-D).\n");
 
   while (true) {
     memset(buffer, 0, sizeof(buffer));
-    fgets(buffer, sizeof(buffer), stdin);
+    ret = fgets(buffer, sizeof(buffer), stdin);
+    if (!ret)
+      break;
     SHA1(buffer, sizeof(buffer), obuffer);
     printf("%s\n", SHA1_string(obuffer));
   }
