@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+
 LIBCRYPTO_NAME=libcrypto.so.1.1
 LIBCRYPTO_PATH=/usr/lib64/
 CC=gcc
