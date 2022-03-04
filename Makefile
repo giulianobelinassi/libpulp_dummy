@@ -1,3 +1,5 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+
 LIBCRYPTO_NAME=libcrypto.so.1.1
 LIBCRYPTO_PATH=/usr/lib64/
 CC=gcc
@@ -24,7 +26,16 @@ libcrypto_livepatch1.so: libcrypto_livepatch1.c
 
 .PHONY: clean
 clean:
-	rm -f *.o *.so *.ulp *.rev test
+	rm -f *.o *.so *.ulp *.rev test libcrypto_livepatch1_install.dsc
+
+.PHONY: install
+install: all
+	mkdir -p "$(DESTDIR)"/opt/ulp-demo/{bin,livepatches}
+	cp -av libcrypto_livepatch1.so "$(DESTDIR)"/opt/ulp-demo/livepatches
+	sed "1s;.*/;/opt/ulp-demo/livepatches/;" libcrypto_livepatch1.dsc > libcrypto_livepatch1_install.dsc
+	ulp packer -o "$(DESTDIR)"/opt/ulp-demo/livepatches/libcrypto_livepatch1.ulp \
+		-l "$(DESTDIR)"/opt/ulp-demo/livepatches/libcrypto_livepatch1.so libcrypto_livepatch1_install.dsc
+	cp -av test "$(DESTDIR)"/opt/ulp-demo/bin/ulp-test
 
 .PHONY:
 livepatchable: ${LIBCRYPTO_PATH}${LIBCRYPTO_NAME}
